@@ -77,10 +77,9 @@ export default function Login() {
           </span>
         </div>
 
-        {/* FIXED WRAPPER: Size is exactly equal to the Main Large Image */}
-        <div className="relative mx-auto mb-12 h-[229.05px] w-[243.24px] tablet:h-96.5 tablet:w-102.5">
+        <div className="relative mx-auto mb-19.5 md:mb-24.5 h-[229.05px] w-[243.24px] tablet:h-96.5 tablet:w-102.5">
   
-          {/* Large Image (Main) - Perfectly centered with the text below */}
+          {/* Large Image*/}
           <div className="absolute inset-0 overflow-hidden rounded-[7px] border-none shadow-none tablet:rounded-xl">
             <Image
               src="/images/loginImage1.png"
@@ -91,7 +90,7 @@ export default function Login() {
             />
           </div>
 
-          {/* Small Image (Overlay) - Sticks out slightly to the right and top */}
+          {/* Small Image (Overlay) */}
           <div className="absolute top-[-17.28px] left-[159.62px] h-[135.28px] w-[105.89px] overflow-hidden rounded-[5px] border-none shadow-none opacity-90 tablet:top-[-29.5px] tablet:left-67.5 tablet:h-57 tablet:w-[178.46px] tablet:rounded-lg">
             <Image
               src="/images/loginImage2.png"
@@ -107,7 +106,7 @@ export default function Login() {
         <div className="text-center">
           <h1
             className="
-          mb-4
+          mb-3
           font-nunito
           text-[40px]
           font-extrabold
@@ -152,6 +151,7 @@ export default function Login() {
             </p>
           </div>
 
+          {/* Login Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div className="space-y-1">
               <label
@@ -197,6 +197,7 @@ export default function Login() {
                       : "border-transparent focus:border-[#8155FF] focus:ring-1 focus:ring-[#8155FF]",
                   )}
                 />
+                {/* Eye Icon Toggle Password*/}
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -235,6 +236,7 @@ export default function Login() {
               </a>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={isSubmitting}
