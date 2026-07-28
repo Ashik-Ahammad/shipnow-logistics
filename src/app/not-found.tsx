@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react'
 
 export default function NotFoundPage() {
@@ -9,7 +10,7 @@ export default function NotFoundPage() {
           Page Not Found
         </p>
         <button className="rounded-lg bg-[#232323] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-black">
-          Back to Dashboard
+          <Link href="/dashboard">Back to Dashboard</Link>
         </button>
       </div>
     </div>

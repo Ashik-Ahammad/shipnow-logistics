@@ -4,6 +4,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Header from "./_components/Header";
 import Sidebar from "./_components/Sidebar";
+import Footer from "@/components/layout/Footer";
 
 export default function DashboardLayout({
   children,
@@ -36,6 +37,8 @@ export default function DashboardLayout({
         <main className="flex-1">
           {children}
         </main>
+
+        <Footer />
       </div>
     </div>
   );
