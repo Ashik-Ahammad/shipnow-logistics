@@ -22,7 +22,7 @@ export default function RecentActivity() {
       </div>
 
       <div className="flex flex-col">
-        {recentActivityData.map((activity, index) => {
+        {recentActivityData.map((activity) => {
           const Icon = iconMap[activity.icon];
 
           return (

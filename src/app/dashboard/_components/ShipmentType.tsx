@@ -13,8 +13,21 @@ const pieData = [
   { name: "Rail Freight", value: 9, color: "#E5E7EB" },
 ];
 
+interface PiePayloadItem {
+  name: string;
+  value: number;
+  payload: {
+    color: string;
+  };
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: PiePayloadItem[];
+}
+
 // Custom Tooltip for Pie
-const CustomTooltip = ({ active, payload }: any) => {
+const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
       <div className="flex flex-col rounded-xl border border-gray-100 bg-white p-3 shadow-lg">

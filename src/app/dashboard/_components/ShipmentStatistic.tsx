@@ -12,9 +12,17 @@ import {
 } from "recharts";
 import { shipmentStatisticData } from "@/data/dashboard";
 
+interface CustomBarProps {
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  index?: number;
+}
+
 // Custom shape for the bars to match Figma design
-const CustomBar = (props: any) => {
-  const { x, y, width, height, index } = props;
+const CustomBar = (props: CustomBarProps) => {
+  const { x = 0, y = 0, width = 0, height = 0, index } = props;
   const isActive = index === 4; // May is active
 
   const gradientId = isActive ? "colorPurple" : "colorGray";
@@ -49,8 +57,18 @@ const CustomBar = (props: any) => {
   );
 };
 
+interface TooltipPayloadItem {
+  value: number;
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: TooltipPayloadItem[];
+  label?: string;
+}
+
 // Custom Tooltip matching Figma design
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
       <div className="flex flex-col items-center justify-center rounded-xl bg-[#E2DDFE] px-4 py-3 shadow-sm">
@@ -66,7 +84,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 export default function ShipmentStatistic() {
   return (
-    <div className="flex h-[254px] flex-col rounded-[20px] bg-white p-5 shadow-[0px_2px_10px_rgba(0,0,0,0.02)]">
+    <div className="flex h-63.5 flex-col rounded-[20px] bg-white p-5 shadow-[0px_2px_10px_rgba(0,0,0,0.02)]">
       {/* Header Section */}
       <div className="mb-2 flex items-center justify-between">
         <h2 className="text-[16px] font-bold text-[#333333]">Shipment Statistic</h2>

@@ -12,7 +12,17 @@ import {
 } from "recharts";
 import { profitSummaryData } from "@/data/dashboard";
 
-const CustomTooltip = ({ active, payload }: any) => {
+interface TooltipPayloadItem {
+  value: number;
+  name: string;
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: TooltipPayloadItem[];
+}
+
+const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (active && payload && payload.length >= 2) {
     return (
       <div className="flex flex-col gap-2 rounded-xl bg-white p-3 shadow-[0px_4px_20px_rgba(0,0,0,0.08)]">

@@ -2,15 +2,44 @@
 
 import { Menu, Plus, Search } from "lucide-react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 interface HeaderProps {
   onMenuClick: () => void;
 }
 
 export default function Header({ onMenuClick }: HeaderProps) {
+  const pathname = usePathname();
+  const isDashboard = pathname === "/dashboard" || pathname === "/";
+
+  // If not on the dashboard, we still need the mobile menu toggle for navigation
+  // but we hide the dashboard-specific content (search, add buttons, 'Hello John').
+  if (!isDashboard) {
+    return (
+      <header className="z-40 tablet:hidden mb-5">
+        <div className="flex items-center justify-between">
+          <Image
+            src="/images/shipnowBlueLogo.png"
+            alt="Logo"
+            width={24}
+            height={24}
+            className="object-contain"
+          />
+          <button 
+            onClick={onMenuClick}
+            className="cursor-pointer text-gray-600 transition-colors hover:text-gray-900 focus:outline-none"
+          >
+            <Menu className="h-6 w-6" />
+          </button>
+        </div>
+      </header>
+    );
+  }
+
   return (
     <header className="z-40">
       
+      {/* Mobile Header */}
       <div className="flex flex-col gap-4 tablet:hidden">
         <div className="flex items-center justify-between">
           <Image
@@ -44,7 +73,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
         </div>
       </div>
 
-      
+      {/* Desktop Header */}
       <div className="hidden items-center justify-between tablet:flex">
         
         <div>

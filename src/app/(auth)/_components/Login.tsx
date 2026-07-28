@@ -40,7 +40,7 @@ export default function Login() {
     },
   });
 
-  const onSubmit = (data: LoginFormValues) => {
+  const onSubmit = () => {
     setTimeout(() => {
       router.push("/dashboard");
     }, 600);
