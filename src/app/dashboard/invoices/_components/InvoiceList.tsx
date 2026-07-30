@@ -108,12 +108,16 @@ export default function InvoiceList({ selectedId, onSelect, globalSearch = '' }:
         <table className="w-full text-left border-collapse whitespace-nowrap">
           <thead>
             <tr className="border-b border-gray-100 text-[12px] text-gray-500 font-medium">
-              <th className="pb-4 pl-4 font-medium flex items-center gap-2">
-                <div className="w-4 h-4 rounded-[4px] bg-[#856DF3] flex items-center justify-center">
-                  <div className="w-2 h-[2px] bg-white rounded-full"></div>
+              <th className="pb-4 pl-4 font-medium">
+                <div className="flex items-center gap-3">
+                  <div className="w-4 h-4 rounded-[4px] bg-[#856DF3] flex items-center justify-center shrink-0">
+                    <div className="w-2 h-[2px] bg-white rounded-full"></div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    Invoice ID
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="text-gray-400"><path d="M7 15L12 20L17 15M7 9L12 4L17 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  </div>
                 </div>
-                Invoice ID
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="text-gray-400"><path d="M7 15L12 20L17 15M7 9L12 4L17 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </th>
               <th className="pb-4 px-4 font-medium">
                 <div className="flex items-center gap-1">

@@ -14,7 +14,7 @@ export default function InvoiceDetails({ invoice, onBack }: InvoiceDetailsProps)
   const total = subTotal + taxAmount + invoice.fee;
 
   return (
-    <div className="bg-white rounded-[24px] shadow-[0px_2px_4px_rgba(0,0,0,0.02)] h-full flex flex-col h-full border border-gray-100/50">
+    <div className="bg-white rounded-[24px] shadow-[0px_2px_4px_rgba(0,0,0,0.02)] h-full flex flex-col border border-gray-100/50">
       {/* Header */}
       <div className="p-6 border-b border-gray-100 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
@@ -52,78 +52,88 @@ export default function InvoiceDetails({ invoice, onBack }: InvoiceDetailsProps)
         <div className="bg-[#F9FAFB] rounded-[16px] p-6 flex flex-col md:flex-row gap-6 justify-between mb-8">
           <div className="flex-1">
             <div className="text-[11px] text-gray-400 font-medium mb-3">Bill From</div>
-            <div className="font-bold text-[#1f2937] text-[15px] mb-1">{invoice.billFrom.name}</div>
-            <div className="text-[12px] text-gray-400 font-medium mb-2">{invoice.billFrom.email}</div>
+            <div className="font-bold text-[#333333] text-[16px] leading-[1.2] mb-1">{invoice.billFrom.name}</div>
+            
+            <div className="md:hidden text-[11px] text-[#757575] font-normal leading-[1.3] mb-2">
+              {invoice.billFrom.email} &bull; {invoice.billFrom.phone}
+            </div>
+            <div className="hidden md:block text-[11px] text-[#757575] font-normal leading-[1.3] mb-2">{invoice.billFrom.email}</div>
+            
             <div className="text-[12px] text-gray-500 whitespace-pre-line leading-relaxed mb-2">{invoice.billFrom.address}</div>
-            <div className="text-[12px] text-gray-500">{invoice.billFrom.phone}</div>
+            <div className="hidden md:block text-[12px] text-gray-500">{invoice.billFrom.phone}</div>
           </div>
-          <div className="flex-1 md:text-right">
+          <div className="flex-1 md:text-right mt-6 md:mt-0">
             <div className="text-[11px] text-gray-400 font-medium mb-3">Bill To</div>
-            <div className="font-bold text-[#1f2937] text-[15px] mb-1">{invoice.billTo.name}</div>
-            <div className="text-[12px] text-gray-400 font-medium mb-2">{invoice.billTo.email}</div>
+            <div className="font-bold text-[#333333] text-[16px] leading-[1.2] mb-1">{invoice.billTo.name}</div>
+            
+            <div className="md:hidden text-[11px] text-[#757575] font-normal leading-[1.3] mb-2">
+              {invoice.billTo.email} &bull; {invoice.billTo.phone}
+            </div>
+            <div className="hidden md:block text-[11px] text-[#757575] font-normal leading-[1.3] mb-2">{invoice.billTo.email}</div>
+            
             <div className="text-[12px] text-gray-500 whitespace-pre-line leading-relaxed mb-2">{invoice.billTo.address}</div>
-            <div className="text-[12px] text-gray-500">{invoice.billTo.phone}</div>
+            <div className="hidden md:block text-[12px] text-gray-500">{invoice.billTo.phone}</div>
           </div>
         </div>
 
         {/* Package Summary */}
-        <h4 className="text-[14px] font-bold text-[#1f2937] mb-4">Package Summary</h4>
-        <div className="rounded-[12px] border border-gray-100 overflow-hidden mb-6">
+        <h4 className="text-[14px] font-semibold text-[#333333] leading-[1.25] mb-4">Package Summary</h4>
+        <div className="rounded-[12px] border border-gray-100 mb-6 overflow-x-auto">
           <table className="w-full text-left border-collapse whitespace-nowrap">
-            <thead>
-              <tr className="border-b border-gray-100 bg-gray-50/50 text-[11px] text-gray-500 font-medium">
-                <th className="py-3 px-4 font-medium flex items-center gap-1">Description <svg width="10" height="10" viewBox="0 0 24 24" fill="none" className="text-gray-400"><path d="M7 15L12 20L17 15M7 9L12 4L17 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></th>
-                <th className="py-3 px-4 font-medium"><div className="flex items-center gap-1">Shipment Type <svg width="10" height="10" viewBox="0 0 24 24" fill="none" className="text-gray-400"><path d="M7 15L12 20L17 15M7 9L12 4L17 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></div></th>
-                <th className="hidden md:table-cell py-3 px-4 font-medium"><div className="flex items-center gap-1">Price <svg width="10" height="10" viewBox="0 0 24 24" fill="none" className="text-gray-400"><path d="M7 15L12 20L17 15M7 9L12 4L17 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></div></th>
-                <th className="hidden md:table-cell py-3 px-4 font-medium"><div className="flex items-center gap-1">Qty <svg width="10" height="10" viewBox="0 0 24 24" fill="none" className="text-gray-400"><path d="M7 15L12 20L17 15M7 9L12 4L17 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></div></th>
-                <th className="py-3 px-4 font-medium text-right"><div className="flex items-center justify-end gap-1">Amount <svg width="10" height="10" viewBox="0 0 24 24" fill="none" className="text-gray-400"><path d="M7 15L12 20L17 15M7 9L12 4L17 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></div></th>
+            <thead className="bg-[#F9FAFB] border-b border-gray-100">
+              <tr className="text-[12px] text-[#4B5563] font-medium">
+                <th className="py-3 pl-5 pr-4 font-medium flex items-center gap-1">Description <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="text-gray-400"><path d="M7 15L12 20L17 15M7 9L12 4L17 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></th>
+                <th className="py-3 px-4 font-medium"><div className="flex items-center gap-1">Shipment Type <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="text-gray-400"><path d="M7 15L12 20L17 15M7 9L12 4L17 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></div></th>
+                <th className="hidden md:table-cell py-3 px-4 font-medium"><div className="flex items-center gap-1">Price <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="text-gray-400"><path d="M7 15L12 20L17 15M7 9L12 4L17 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></div></th>
+                <th className="hidden md:table-cell py-3 px-4 font-medium"><div className="flex items-center gap-1">Qty <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="text-gray-400"><path d="M7 15L12 20L17 15M7 9L12 4L17 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></div></th>
+                <th className="py-3 pr-5 pl-4 font-medium text-right"><div className="flex items-center justify-end gap-1">Amount <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="text-gray-400"><path d="M7 15L12 20L17 15M7 9L12 4L17 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></div></th>
               </tr>
             </thead>
             <tbody>
               {invoice.lineItems.map((item, idx) => (
-                <tr key={idx} className="border-b border-gray-100 last:border-none">
-                  <td className="py-4 px-4 align-top">
-                    <div className="text-[12px] font-semibold text-[#1f2937]">{item.description}</div>
-                    <div className="md:hidden text-[11px] text-[#856DF3] mt-1">
-                      ${item.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} <span className="text-gray-400 font-medium">x {item.qty}</span>
+                <tr key={idx} className="border-b border-gray-100">
+                  <td className="py-5 pl-5 pr-4 align-top">
+                    <div className="text-[13px] font-medium text-[#333333]">{item.description}</div>
+                    <div className="md:hidden text-[11px] mt-1">
+                      <span className="text-[#856DF3] font-medium">${item.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span> <span className="text-gray-400 font-medium">x {item.qty}</span>
                     </div>
                   </td>
-                  <td className="py-4 px-4 align-top">
-                    <div className="flex flex-col">
-                      <span className="text-[12px] font-semibold text-[#1f2937]">{item.shipmentType}</span>
-                      <span className="text-[11px] text-gray-400 font-medium">{item.serviceLevel}</span>
+                  <td className="py-5 px-4 align-top">
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[13px] text-[#333333] font-medium">{item.shipmentType}</span>
+                      <span className="text-[12px] text-[#A3A3A3] font-normal">{item.serviceLevel}</span>
                     </div>
                   </td>
-                  <td className="hidden md:table-cell py-4 px-4 text-[12px] font-bold text-[#1f2937] align-top">${item.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
-                  <td className="hidden md:table-cell py-4 px-4 text-[12px] font-bold text-[#1f2937] align-top">{item.qty}</td>
-                  <td className="py-4 px-4 text-right text-[12px] font-bold text-[#1f2937] align-top">${(item.price * item.qty).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                  <td className="hidden md:table-cell py-5 px-4 text-[13px] font-medium text-[#333333] align-top">${item.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                  <td className="hidden md:table-cell py-5 px-4 text-[13px] font-medium text-[#333333] align-top">{item.qty}</td>
+                  <td className="py-5 pr-5 pl-4 text-right text-[13px] font-medium text-[#333333] align-top">${(item.price * item.qty).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                 </tr>
               ))}
               
               {/* Totals rows */}
-              <tr className="border-t border-gray-100">
-                <td className="hidden md:table-cell" colSpan={2}></td>
+              <tr>
                 <td></td>
-                <td className="py-3 px-4 text-[12px] text-gray-500 font-medium">Sub Total</td>
-                <td className="py-3 px-4 text-right text-[12px] font-bold text-[#1f2937]">${subTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                <td className="pt-6 pb-2 px-4 text-[11px] text-[#757575] font-medium hidden md:table-cell" colSpan={3}>Sub Total</td>
+                <td className="pt-6 pb-2 px-4 text-[11px] text-[#757575] font-medium md:hidden">Sub Total</td>
+                <td className="pt-6 pb-2 pr-5 pl-4 text-right text-[11px] font-medium text-[#333333]">${subTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
               </tr>
               <tr>
-                <td className="hidden md:table-cell" colSpan={2}></td>
                 <td></td>
-                <td className="py-2 px-4 text-[12px] text-gray-500 font-medium">Tax ({(invoice.taxRate * 100).toFixed(0)}%)</td>
-                <td className="py-2 px-4 text-right text-[12px] font-bold text-[#1f2937]">${taxAmount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                <td className="py-2 px-4 text-[11px] text-[#757575] font-medium hidden md:table-cell" colSpan={3}>Tax ({(invoice.taxRate * 100).toFixed(0)}%)</td>
+                <td className="py-2 px-4 text-[11px] text-[#757575] font-medium md:hidden">Tax ({(invoice.taxRate * 100).toFixed(0)}%)</td>
+                <td className="py-2 pr-5 pl-4 text-right text-[11px] font-medium text-[#333333]">${taxAmount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
               </tr>
               <tr>
-                <td className="hidden md:table-cell" colSpan={2}></td>
                 <td></td>
-                <td className="py-2 px-4 text-[12px] text-gray-500 font-medium pb-4">Fee</td>
-                <td className="py-2 px-4 text-right text-[12px] font-bold text-[#1f2937] pb-4">${invoice.fee.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                <td className="pt-2 pb-6 px-4 text-[11px] text-[#757575] font-medium hidden md:table-cell" colSpan={3}>Fee</td>
+                <td className="pt-2 pb-6 px-4 text-[11px] text-[#757575] font-medium md:hidden">Fee</td>
+                <td className="pt-2 pb-6 pr-5 pl-4 text-right text-[11px] font-medium text-[#333333]">${invoice.fee.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
               </tr>
-              <tr className="border-t border-gray-100 bg-gray-50/50">
-                <td className="hidden md:table-cell" colSpan={2}></td>
+              <tr>
                 <td></td>
-                <td className="py-4 px-4 text-[13px] text-[#1f2937] font-bold">Total</td>
-                <td className="py-4 px-4 text-right text-[14px] font-bold text-[#1f2937]">${total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                <td className="py-4 px-4 text-[11px] text-[#333333] font-bold border-t border-gray-100 hidden md:table-cell" colSpan={3}>Total</td>
+                <td className="py-4 px-4 text-[11px] text-[#333333] font-bold border-t border-gray-100 md:hidden">Total</td>
+                <td className="py-4 pr-5 pl-4 text-right text-[12px] font-bold text-[#333333] border-t border-gray-100">${total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
               </tr>
             </tbody>
           </table>

@@ -49,10 +49,10 @@ export default function InvoicesPage() {
       </div>
 
       {/* Main Content Area: Responsive Master-Detail */}
-      <div className="flex flex-col xl:flex-row gap-6 relative">
+      <div className="grid grid-cols-1 xl:flex xl:flex-row gap-6 relative">
         
         {/* Left Side: Invoice List */}
-        <div className="w-full xl:w-[60%] flex flex-col">
+        <div className="w-full xl:w-[60%] col-start-1 row-start-1">
           <InvoiceList 
             selectedId={selectedInvoiceId || ''} 
             onSelect={(id) => setSelectedInvoiceId(id)} 
@@ -63,15 +63,16 @@ export default function InvoicesPage() {
         {/* Right Side: Invoice Details */}
         {selectedInvoiceId && (
           <>
-            {/* Backdrop for tablet/mobile */}
+            {/* Backdrop for tablet */}
             <div 
-              className="absolute inset-0 bg-[#333333]/20 z-10 rounded-[24px] xl:hidden"
+              className="hidden md:block xl:hidden absolute inset-0 bg-[#333333]/10 z-10 rounded-[24px]"
               onClick={() => setSelectedInvoiceId(null)}
             ></div>
 
             <div className={`
-              absolute top-0 bottom-0 right-0 z-20 w-full sm:w-[400px] md:w-[480px]
-              xl:static xl:w-[40%] xl:flex xl:flex-col xl:z-auto xl:shadow-none
+              w-full z-20 col-start-1 row-start-2
+              md:row-start-1 md:justify-self-end md:self-start md:w-[660px] lg:w-[700px] md:shadow-[0px_12px_48px_rgba(0,0,0,0.12)]
+              xl:w-[40%] xl:z-auto xl:self-stretch xl:shadow-none xl:rounded-none
             `}>
               <InvoiceDetails 
                 invoice={selectedInvoice} 
