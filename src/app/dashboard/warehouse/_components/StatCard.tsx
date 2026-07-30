@@ -20,7 +20,7 @@ export default function StatCard({ title, data, unit }: StatCardProps) {
           <span className="text-[24px] font-bold text-[#333333] leading-none tracking-tight">{data.value}</span>
           {unit && <span className="hidden md:inline text-[12px] text-gray-400 font-medium">{unit}</span>}
         </div>
-        <div className={`px-1.5 md:px-2.5 py-1 rounded-[4px] text-[10px] font-semibold flex items-center gap-1 leading-[1.3] self-start md:self-auto ${
+        <div className={`px-1.5 md:px-2.5 py-1 rounded-sm text-[10px] font-semibold flex items-center gap-1 leading-[1.3] self-start md:self-auto ${
           isPositive ? 'bg-[#E8F8F0] text-[#007837]' : 'bg-red-50 text-red-500'
         }`}>
           {isPositive ? (

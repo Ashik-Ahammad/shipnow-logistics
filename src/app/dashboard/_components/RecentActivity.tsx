@@ -59,7 +59,7 @@ export default function RecentActivity() {
           return (
             <div key={activity.id} className={cn("relative flex gap-4", activity.hasLine ? "pb-6" : "")}>
               {activity.hasLine && (
-                <div className="absolute left-4.75 top-10 h-[calc(100%-40px)] w-0.5 bg-gray-100"></div>
+                <div className="absolute left-[19px] top-[46px] h-[calc(100%-52px)] w-[2px] bg-gray-200"></div>
               )}
               
               <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-full", activity.iconBg)}>

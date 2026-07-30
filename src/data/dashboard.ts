@@ -167,7 +167,7 @@ export const recentActivityData: ActivityItem[] = [
     icon: "CheckCircle2",
     iconBg: "bg-[#E0E0E0]",
     iconColor: "text-[#757575]",
-    hasLine: false,
+    hasLine: true,
   },
 ];
 

@@ -35,6 +35,7 @@ function ShipmentsContent() {
   const [freightFilter, setFreightFilter] = useState("All");
   const [dateFilter, setDateFilter] = useState("This Month");
   const [sortFilter, setSortFilter] = useState("Default");
+  const [tableSortConfig, setTableSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null);
 
   const [data, setData] = useState([...shipmentsData]);
 
@@ -70,6 +71,43 @@ function ShipmentsContent() {
   });
 
   const sortedData = [...filteredData].sort((a, b) => {
+    if (tableSortConfig) {
+      let comparison = 0;
+      switch (tableSortConfig.key) {
+        case 'id':
+          comparison = a.id.localeCompare(b.id);
+          break;
+        case 'company':
+          comparison = a.company.name.localeCompare(b.company.name);
+          break;
+        case 'carrier':
+          comparison = a.carrier.localeCompare(b.carrier);
+          break;
+        case 'category':
+          comparison = a.productCategory.localeCompare(b.productCategory);
+          break;
+        case 'weight':
+          // safely parse weight (e.g. "120 kg")
+          comparison = parseInt(a.weight) - parseInt(b.weight);
+          break;
+        case 'route':
+          comparison = a.route.origin.localeCompare(b.route.origin);
+          break;
+        case 'date':
+          const dateA = a.dates.atd !== "Pending" ? new Date(a.dates.atd).getTime() : new Date(a.dates.eta).getTime();
+          const dateB = b.dates.atd !== "Pending" ? new Date(b.dates.atd).getTime() : new Date(b.dates.eta).getTime();
+          comparison = dateA - dateB;
+          break;
+        case 'progress':
+          comparison = a.progress - b.progress;
+          break;
+        case 'status':
+          comparison = a.status.localeCompare(b.status);
+          break;
+      }
+      return tableSortConfig.direction === 'asc' ? comparison : -comparison;
+    }
+
     if (sortFilter === "A-Z") return a.company.name.localeCompare(b.company.name);
     if (sortFilter === "Z-A") return b.company.name.localeCompare(a.company.name);
     if (sortFilter === "Newest" || sortFilter === "Oldest") {
@@ -236,6 +274,15 @@ function ShipmentsContent() {
                 setCurrentPage(1);
               }}
               totalItems={filteredData.length}
+              sortConfig={tableSortConfig}
+              onSort={(key) => {
+                let direction: 'asc' | 'desc' = 'asc';
+                if (tableSortConfig && tableSortConfig.key === key && tableSortConfig.direction === 'asc') {
+                  direction = 'desc';
+                }
+                setTableSortConfig({ key, direction });
+                setCurrentPage(1);
+              }}
             />
           </div>
         </div>

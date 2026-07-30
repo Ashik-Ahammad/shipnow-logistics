@@ -55,7 +55,12 @@ export default function ShipmentType() {
       </div>
 
       {/* Recharts Donut Chart */}
-      <div className="relative mb-4 flex flex-1 min-h-37.5 w-full items-center justify-center">
+      <div className="relative mb-4 flex flex-1 min-h-[240px] w-full items-center justify-center">
+        <div className="absolute flex flex-col items-center justify-center pointer-events-none">
+          <span className="text-[12px] font-medium text-[#A3A3A3]">Total Shipment</span>
+          <span className="text-[28px] font-bold text-[#333333]">{shipmentTypeData.total}</span>
+        </div>
+
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -77,12 +82,6 @@ export default function ShipmentType() {
             <Tooltip content={<CustomTooltip />} />
           </PieChart>
         </ResponsiveContainer>
-        
-        {/* Center Text */}
-        <div className="absolute flex flex-col items-center justify-center pointer-events-none">
-          <span className="text-[12px] font-medium text-[#A3A3A3]">Total Shipment</span>
-          <span className="text-[28px] font-bold text-[#333333]">{shipmentTypeData.total}</span>
-        </div>
       </div>
 
       {/* Legends */}

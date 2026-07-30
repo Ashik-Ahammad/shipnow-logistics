@@ -15,6 +15,8 @@ interface ShipmentsTableProps {
   pageSize: number;
   onPageSizeChange: (size: number) => void;
   totalItems: number;
+  sortConfig?: { key: string, direction: 'asc' | 'desc' } | null;
+  onSort?: (key: string) => void;
 }
 
 const AirFreightIcon = () => (
@@ -57,10 +59,10 @@ const getFreightIcon = (freightType: string) => {
   }
 };
 
-const SortIcon = () => (
+const SortIcon = ({ active, direction }: { active?: boolean, direction?: 'asc' | 'desc' }) => (
   <div className="flex flex-col -space-y-1.5">
-    <ChevronUp className="h-2.5 w-2.5 text-gray-400" />
-    <ChevronDown className="h-2.5 w-2.5 text-gray-400" />
+    <ChevronUp className={cn("h-2.5 w-2.5", active && direction === 'asc' ? "text-[#856DF3]" : "text-gray-400")} />
+    <ChevronDown className={cn("h-2.5 w-2.5", active && direction === 'desc' ? "text-[#856DF3]" : "text-gray-400")} />
   </div>
 );
 
@@ -72,6 +74,8 @@ export default function ShipmentsTable({
   pageSize,
   onPageSizeChange,
   totalItems,
+  sortConfig,
+  onSort
 }: ShipmentsTableProps) {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
@@ -138,32 +142,32 @@ export default function ShipmentsTable({
                   )}
                 </button>
               </th>
-              <th scope="col" className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50">
-                <div className="flex items-center gap-1.5">Shipping ID <SortIcon /></div>
+              <th scope="col" onClick={() => onSort?.('id')} className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50 transition-colors">
+                <div className="flex items-center gap-1.5 select-none">Shipping ID <SortIcon active={sortConfig?.key === 'id'} direction={sortConfig?.direction} /></div>
               </th>
-              <th scope="col" className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50">
-                <div className="flex items-center gap-1.5">Company <SortIcon /></div>
+              <th scope="col" onClick={() => onSort?.('company')} className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50 transition-colors">
+                <div className="flex items-center gap-1.5 select-none">Company <SortIcon active={sortConfig?.key === 'company'} direction={sortConfig?.direction} /></div>
               </th>
-              <th scope="col" className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50">
-                <div className="flex items-center gap-1.5">Carriers <SortIcon /></div>
+              <th scope="col" onClick={() => onSort?.('carrier')} className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50 transition-colors">
+                <div className="flex items-center gap-1.5 select-none">Carriers <SortIcon active={sortConfig?.key === 'carrier'} direction={sortConfig?.direction} /></div>
               </th>
-              <th scope="col" className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50">
-                <div className="flex items-center gap-1.5">Product Category <SortIcon /></div>
+              <th scope="col" onClick={() => onSort?.('category')} className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50 transition-colors">
+                <div className="flex items-center gap-1.5 select-none">Product Category <SortIcon active={sortConfig?.key === 'category'} direction={sortConfig?.direction} /></div>
               </th>
-              <th scope="col" className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50">
-                <div className="flex items-center gap-1.5">Weight <SortIcon /></div>
+              <th scope="col" onClick={() => onSort?.('weight')} className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50 transition-colors">
+                <div className="flex items-center gap-1.5 select-none">Weight <SortIcon active={sortConfig?.key === 'weight'} direction={sortConfig?.direction} /></div>
               </th>
-              <th scope="col" className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50">
-                <div className="flex items-center gap-1.5">Route <SortIcon /></div>
+              <th scope="col" onClick={() => onSort?.('route')} className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50 transition-colors">
+                <div className="flex items-center gap-1.5 select-none">Route <SortIcon active={sortConfig?.key === 'route'} direction={sortConfig?.direction} /></div>
               </th>
-              <th scope="col" className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50">
-                <div className="flex items-center gap-1.5">Date <SortIcon /></div>
+              <th scope="col" onClick={() => onSort?.('date')} className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50 transition-colors">
+                <div className="flex items-center gap-1.5 select-none">Date <SortIcon active={sortConfig?.key === 'date'} direction={sortConfig?.direction} /></div>
               </th>
-              <th scope="col" className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50">
-                <div className="flex items-center gap-1.5">Progress <SortIcon /></div>
+              <th scope="col" onClick={() => onSort?.('progress')} className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50 transition-colors">
+                <div className="flex items-center gap-1.5 select-none">Progress <SortIcon active={sortConfig?.key === 'progress'} direction={sortConfig?.direction} /></div>
               </th>
-              <th scope="col" className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50">
-                <div className="flex items-center gap-1.5">Status <SortIcon /></div>
+              <th scope="col" onClick={() => onSort?.('status')} className="px-4 py-4 text-left text-[10px] font-normal text-[#333333] whitespace-nowrap cursor-pointer hover:bg-gray-50 transition-colors">
+                <div className="flex items-center gap-1.5 select-none">Status <SortIcon active={sortConfig?.key === 'status'} direction={sortConfig?.direction} /></div>
               </th>
             </tr>
           </thead>

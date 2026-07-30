@@ -118,7 +118,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
             onClick={handleAddNewShipping}
             className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#333333] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-black"
           >
-            <Plus className="h-4 w-4" />
+            <Plus className="hidden desktop:block h-4 w-4" />
             <span className="hidden desktop:inline">Add New Shipping</span>
             <span className="inline desktop:hidden">New Shipping</span>
           </button>

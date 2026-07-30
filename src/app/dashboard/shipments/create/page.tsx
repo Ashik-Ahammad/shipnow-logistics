@@ -5,6 +5,34 @@ import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Shipment, addShipment } from "@/data/shipments";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+const formSchema = z.object({
+  senderCompany: z.string().min(1, "Sender company is required"),
+  senderEmail: z.string().min(1, "Email is required").email("Please enter a valid email address"),
+  senderPhone: z.string().min(1, "Phone number is required"),
+  pickupAddress: z.string().min(1, "Pickup address is required"),
+  recipientCompany: z.string().min(1, "Recipient company is required"),
+  recipientEmail: z.string().min(1, "Email is required").email("Please enter a valid email address"),
+  recipientPhone: z.string().min(1, "Phone number is required"),
+  deliveryAddress: z.string().min(1, "Delivery address is required"),
+  itemDescription: z.string().min(1, "Item description is required"),
+  quantity: z.number({ message: "Quantity must be a number" }).min(1, "Must be at least 1"),
+  value: z.string().min(1, "Value is required"),
+  weight: z.number({ message: "Weight must be a number" }).min(0.1, "Invalid weight"),
+  units: z.string().min(1, "Units required"),
+  length: z.number({ message: "Required" }).min(0.1, "Invalid"),
+  width: z.number({ message: "Required" }).min(0.1, "Invalid"),
+  height: z.number({ message: "Required" }).min(0.1, "Invalid"),
+  carrier: z.string().min(1, "Carrier is required"),
+  shippingMethod: z.string().min(1, "Shipping method is required"),
+  shipmentDate: z.string().min(1, "Shipment date is required"),
+  notes: z.string().optional()
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 const countryCodes = [
   { code: 'us', flag: '🇺🇸', dial: '+1' },
@@ -80,38 +108,49 @@ export default function CreateShipmentPage() {
   const [senderCountry, setSenderCountry] = useState("us");
   const [recipientCountry, setRecipientCountry] = useState("us");
 
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors }
+  } = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      units: "Kg",
+      carrier: "",
+      shippingMethod: ""
+    }
+  });
+
+  const quantity = watch("quantity");
+
   const toggleService = (service: string) => {
     setServices(prev => prev.includes(service) ? prev.filter(s => s !== service) : [...prev, service]);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    
-    const pickupAddress = formData.get("pickupAddress") as string;
-    const deliveryAddress = formData.get("deliveryAddress") as string;
-    
-    const origin = pickupAddress.split(',')[1]?.trim() || pickupAddress.split(' ')[0] || "Unknown";
-    const destination = deliveryAddress.split(',')[1]?.trim() || deliveryAddress.split(' ')[0] || "Unknown";
+  const onSubmit = (data: FormValues) => {
+    const origin = data.pickupAddress.split(',')[1]?.trim() || data.pickupAddress.split(' ')[0] || "Unknown";
+    const destination = data.deliveryAddress.split(',')[1]?.trim() || data.deliveryAddress.split(' ')[0] || "Unknown";
 
     const newShipment: Shipment = {
       id: `#SH${Math.floor(1000000 + Math.random() * 9000000)}`,
       freightType: freightType,
       company: {
-        name: formData.get("recipientCompany") as string,
+        name: data.recipientCompany,
         category: "General",
         logoColor: "bg-[#856DF3]",
       },
-      carrier: formData.get("carrier") as string,
-      productCategory: formData.get("itemDescription") as string,
-      weight: `${formData.get("weight")} ${formData.get("units")}`,
+      carrier: data.carrier,
+      productCategory: data.itemDescription,
+      weight: `${data.weight} ${data.units}`,
       route: {
         origin,
         destination
       },
       dates: {
         atd: "Pending",
-        eta: formData.get("shipmentDate") as string,
+        eta: data.shipmentDate,
       },
       progress: 0,
       status: "Pending",
@@ -121,11 +160,16 @@ export default function CreateShipmentPage() {
     router.push("/dashboard/shipments");
   };
 
-  const inputClass = "w-full rounded-lg bg-white px-4 py-2.5 text-[13px] font-medium text-gray-900 outline-none border border-transparent focus:border-[#856DF3] focus:ring-1 focus:ring-[#856DF3] transition-all placeholder:text-gray-400 placeholder:font-normal";
-  const grayInputClass = "w-full rounded-lg bg-[#F9F9FC] px-4 py-2.5 text-[13px] font-medium text-gray-900 outline-none border border-transparent focus:border-[#856DF3] focus:ring-1 focus:ring-[#856DF3] transition-all placeholder:text-gray-400 placeholder:font-normal";
+  const getInputClass = (error: any, isGray = false) => {
+    const base = `w-full rounded-lg ${isGray ? 'bg-[#F9F9FC]' : 'bg-white'} px-4 py-2.5 text-[13px] font-medium text-gray-900 outline-none border transition-all placeholder:text-gray-400 placeholder:font-normal`;
+    if (error) {
+      return cn(base, "border-red-500 focus:ring-1 focus:ring-red-500");
+    }
+    return cn(base, "border-transparent focus:border-[#856DF3] focus:ring-1 focus:ring-[#856DF3]");
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6 h-full p-6 w-full">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6 h-full p-6 w-full">
       <style dangerouslySetInnerHTML={{__html: `
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
@@ -177,47 +221,47 @@ export default function CreateShipmentPage() {
                   <label className="block text-[11px] font-medium text-gray-500 mb-1.5">Company</label>
                   <input 
                     type="text" 
-                    name="senderCompany"
-                    required
                     placeholder="GreenHaven"
-                    className={inputClass}
+                    className={getInputClass(errors.senderCompany)}
+                    {...register("senderCompany")}
                   />
+                  {errors.senderCompany && <p className="mt-1 text-[10px] text-red-500">{errors.senderCompany.message}</p>}
                 </div>
                 <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-[11px] font-medium text-gray-500 mb-1.5">Email</label>
                     <input 
                       type="email" 
-                      name="senderEmail"
-                      required
                       placeholder="logistics@greenhaven.com"
-                      className={inputClass}
+                      className={getInputClass(errors.senderEmail)}
+                      {...register("senderEmail")}
                     />
+                    {errors.senderEmail && <p className="mt-1 text-[10px] text-red-500">{errors.senderEmail.message}</p>}
                   </div>
                   <div>
                     <label className="block text-[11px] font-medium text-gray-500 mb-1.5">Phone Number</label>
-                    <div className="flex items-center rounded-lg bg-white h-[42px] focus-within:ring-1 focus-within:ring-[#856DF3] focus-within:border-[#856DF3] border border-transparent transition-all">
+                    <div className={cn("flex items-center rounded-lg bg-white h-[42px] focus-within:ring-1 border transition-all", errors.senderPhone ? "border-red-500 focus-within:ring-red-500" : "border-transparent focus-within:ring-[#856DF3] focus-within:border-[#856DF3]")}>
                       <CountrySelect value={senderCountry} onChange={setSenderCountry} />
                       <div className="w-px h-5 bg-gray-200 mx-1 flex-shrink-0" />
                       <input 
                         type="text" 
-                        name="senderPhone"
-                        required
                         placeholder="408-555-7210"
                         className="flex-1 bg-transparent px-3 py-2.5 text-[13px] font-medium text-gray-900 outline-none placeholder:text-gray-400 placeholder:font-normal w-full"
+                        {...register("senderPhone")}
                       />
                     </div>
+                    {errors.senderPhone && <p className="mt-1 text-[10px] text-red-500">{errors.senderPhone.message}</p>}
                   </div>
                 </div>
                 <div>
                   <label className="block text-[11px] font-medium text-gray-500 mb-1.5">Pickup Address</label>
                   <input 
                     type="text" 
-                    name="pickupAddress"
-                    required
                     placeholder="1120 Birch Street, Portland, OR 97205, USA"
-                    className={inputClass}
+                    className={getInputClass(errors.pickupAddress)}
+                    {...register("pickupAddress")}
                   />
+                  {errors.pickupAddress && <p className="mt-1 text-[10px] text-red-500">{errors.pickupAddress.message}</p>}
                 </div>
               </div>
             </div>
@@ -230,47 +274,47 @@ export default function CreateShipmentPage() {
                   <label className="block text-[11px] font-medium text-gray-500 mb-1.5">Company</label>
                   <input 
                     type="text" 
-                    name="recipientCompany"
-                    required
                     placeholder="FreshNest"
-                    className={inputClass}
+                    className={getInputClass(errors.recipientCompany)}
+                    {...register("recipientCompany")}
                   />
+                  {errors.recipientCompany && <p className="mt-1 text-[10px] text-red-500">{errors.recipientCompany.message}</p>}
                 </div>
                 <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-[11px] font-medium text-gray-500 mb-1.5">Email</label>
                     <input 
                       type="email" 
-                      name="recipientEmail"
-                      required
                       placeholder="warehouse@freshnest.com"
-                      className={inputClass}
+                      className={getInputClass(errors.recipientEmail)}
+                      {...register("recipientEmail")}
                     />
+                    {errors.recipientEmail && <p className="mt-1 text-[10px] text-red-500">{errors.recipientEmail.message}</p>}
                   </div>
                   <div>
                     <label className="block text-[11px] font-medium text-gray-500 mb-1.5">Phone Number</label>
-                    <div className="flex items-center rounded-lg bg-white h-[42px] focus-within:ring-1 focus-within:ring-[#856DF3] focus-within:border-[#856DF3] border border-transparent transition-all">
+                    <div className={cn("flex items-center rounded-lg bg-white h-[42px] focus-within:ring-1 border transition-all", errors.recipientPhone ? "border-red-500 focus-within:ring-red-500" : "border-transparent focus-within:ring-[#856DF3] focus-within:border-[#856DF3]")}>
                       <CountrySelect value={recipientCountry} onChange={setRecipientCountry} />
                       <div className="w-px h-5 bg-gray-200 mx-1 flex-shrink-0" />
                       <input 
                         type="text" 
-                        name="recipientPhone"
-                        required
                         placeholder="786-555-4432"
                         className="flex-1 bg-transparent px-3 py-2.5 text-[13px] font-medium text-gray-900 outline-none placeholder:text-gray-400 placeholder:font-normal w-full"
+                        {...register("recipientPhone")}
                       />
                     </div>
+                    {errors.recipientPhone && <p className="mt-1 text-[10px] text-red-500">{errors.recipientPhone.message}</p>}
                   </div>
                 </div>
                 <div>
                   <label className="block text-[11px] font-medium text-gray-500 mb-1.5">Delivery Address</label>
                   <input 
                     type="text" 
-                    name="deliveryAddress"
-                    required
                     placeholder="Street address, city, state/province, ZIP code"
-                    className={inputClass}
+                    className={getInputClass(errors.deliveryAddress)}
+                    {...register("deliveryAddress")}
                   />
+                  {errors.deliveryAddress && <p className="mt-1 text-[10px] text-red-500">{errors.deliveryAddress.message}</p>}
                 </div>
               </div>
             </div>
@@ -294,11 +338,11 @@ export default function CreateShipmentPage() {
                 <label className="block text-[11px] font-medium text-gray-500 mb-1.5">Item Description</label>
                 <input 
                   type="text" 
-                  name="itemDescription"
-                  required
                   placeholder="Premium Garden Tool Set"
-                  className={grayInputClass}
+                  className={getInputClass(errors.itemDescription, true)}
+                  {...register("itemDescription")}
                 />
+                {errors.itemDescription && <p className="mt-1 text-[10px] text-red-500">{errors.itemDescription.message}</p>}
               </div>
               
               <div className="grid grid-cols-2 gap-4">
@@ -307,46 +351,56 @@ export default function CreateShipmentPage() {
                   <div className="relative">
                     <input 
                       type="number" 
-                      name="quantity"
-                      required
                       placeholder="40"
-                      className={grayInputClass}
+                      className={getInputClass(errors.quantity, true)}
+                      {...register("quantity", { valueAsNumber: true })}
                     />
                     <div className="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col items-center">
-                      <ChevronUp className="h-3 w-3 text-gray-400 cursor-pointer hover:text-gray-600" />
-                      <ChevronDown className="h-3 w-3 text-gray-400 cursor-pointer hover:text-gray-600" />
+                      <ChevronUp 
+                        className="h-3 w-3 text-gray-400 cursor-pointer hover:text-gray-600" 
+                        onClick={() => setValue("quantity", (quantity || 0) + 1)}
+                      />
+                      <ChevronDown 
+                        className="h-3 w-3 text-gray-400 cursor-pointer hover:text-gray-600" 
+                        onClick={() => setValue("quantity", Math.max(0, (quantity || 0) - 1))}
+                      />
                     </div>
                   </div>
+                  {errors.quantity && <p className="mt-1 text-[10px] text-red-500">{errors.quantity.message}</p>}
                 </div>
                 <div>
                   <label className="block text-[11px] font-medium text-gray-500 mb-1.5">Value</label>
                   <input 
                     type="text" 
-                    name="value"
-                    required
                     placeholder="$3,200"
-                    className={grayInputClass}
+                    className={getInputClass(errors.value, true)}
+                    {...register("value")}
                   />
+                  {errors.value && <p className="mt-1 text-[10px] text-red-500">{errors.value.message}</p>}
                 </div>
                 <div>
                   <label className="block text-[11px] font-medium text-gray-500 mb-1.5">Weight</label>
                   <input 
                     type="number" 
-                    name="weight"
-                    required
                     placeholder="125"
-                    className={grayInputClass}
+                    className={getInputClass(errors.weight, true)}
+                    {...register("weight", { valueAsNumber: true })}
                   />
+                  {errors.weight && <p className="mt-1 text-[10px] text-red-500">{errors.weight.message}</p>}
                 </div>
                 <div>
                   <label className="block text-[11px] font-medium text-gray-500 mb-1.5">Units</label>
                   <div className="relative">
-                    <select name="units" required className="w-full appearance-none rounded-lg bg-[#F9F9FC] px-4 py-2.5 text-[13px] font-medium text-gray-900 outline-none border border-transparent focus:border-[#856DF3] focus:ring-1 focus:ring-[#856DF3] transition-all cursor-pointer">
+                    <select 
+                      className={cn(getInputClass(errors.units, true), "appearance-none cursor-pointer")}
+                      {...register("units")}
+                    >
                       <option value="Kg">Kg</option>
                       <option value="Lbs">Lbs</option>
                     </select>
                     <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400 pointer-events-none" />
                   </div>
+                  {errors.units && <p className="mt-1 text-[10px] text-red-500">{errors.units.message}</p>}
                 </div>
               </div>
 
@@ -357,40 +411,40 @@ export default function CreateShipmentPage() {
                     <div className="relative">
                       <input 
                         type="number" 
-                        name="length"
-                        required
                         placeholder="80"
-                        className={cn(grayInputClass, "pl-4 pr-10")}
+                        className={cn(getInputClass(errors.length, true), "pl-4 pr-10")}
+                        {...register("length", { valueAsNumber: true })}
                       />
                       <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] font-medium text-gray-400">cm</span>
                     </div>
-                    <p className="text-[10px] text-gray-400 mt-1.5">Length</p>
+                    {errors.length && <p className="mt-1 text-[10px] text-red-500">Required</p>}
+                    {!errors.length && <p className="text-[10px] text-gray-400 mt-1.5">Length</p>}
                   </div>
                   <div>
                     <div className="relative">
                       <input 
                         type="number" 
-                        name="width"
-                        required
                         placeholder="60"
-                        className={cn(grayInputClass, "pl-4 pr-10")}
+                        className={cn(getInputClass(errors.width, true), "pl-4 pr-10")}
+                        {...register("width", { valueAsNumber: true })}
                       />
                       <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] font-medium text-gray-400">cm</span>
                     </div>
-                    <p className="text-[10px] text-gray-400 mt-1.5">Width</p>
+                    {errors.width && <p className="mt-1 text-[10px] text-red-500">Required</p>}
+                    {!errors.width && <p className="text-[10px] text-gray-400 mt-1.5">Width</p>}
                   </div>
                   <div>
                     <div className="relative">
                       <input 
                         type="number" 
-                        name="height"
-                        required
                         placeholder="ex. 20"
-                        className={cn(grayInputClass, "pl-4 pr-10")}
+                        className={cn(getInputClass(errors.height, true), "pl-4 pr-10")}
+                        {...register("height", { valueAsNumber: true })}
                       />
                       <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] font-medium text-gray-400">cm</span>
                     </div>
-                    <p className="text-[10px] text-gray-400 mt-1.5">Height</p>
+                    {errors.height && <p className="mt-1 text-[10px] text-red-500">Required</p>}
+                    {!errors.height && <p className="text-[10px] text-gray-400 mt-1.5">Height</p>}
                   </div>
                 </div>
               </div>
@@ -419,24 +473,33 @@ export default function CreateShipmentPage() {
               <div>
                 <label className="block text-[11px] font-medium text-gray-500 mb-1.5">Carrier</label>
                 <div className="relative">
-                  <select name="carrier" required className="w-full appearance-none rounded-lg bg-[#F9F9FC] px-4 py-2.5 text-[13px] font-medium text-gray-900 outline-none border border-transparent focus:border-[#856DF3] focus:ring-1 focus:ring-[#856DF3] transition-all cursor-pointer">
+                  <select 
+                    className={cn(getInputClass(errors.carrier, true), "appearance-none cursor-pointer invalid:text-gray-400 invalid:font-normal")}
+                    {...register("carrier")}
+                  >
+                    <option value="" disabled hidden>Select Carrier</option>
                     <option value="FedEx">FedEx</option>
                     <option value="UPS">UPS</option>
                     <option value="DHL">DHL</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400 pointer-events-none" />
                 </div>
+                {errors.carrier && <p className="mt-1 text-[10px] text-red-500">{errors.carrier.message}</p>}
               </div>
               <div>
                 <label className="block text-[11px] font-medium text-gray-500 mb-1.5">Shipping Method</label>
                 <div className="relative">
-                  <select name="shippingMethod" required defaultValue="" className="w-full appearance-none rounded-lg bg-[#F9F9FC] px-4 py-2.5 text-[13px] font-medium text-gray-900 outline-none border border-transparent focus:border-[#856DF3] focus:ring-1 focus:ring-[#856DF3] transition-all cursor-pointer invalid:text-gray-400 invalid:font-normal">
+                  <select 
+                    className={cn(getInputClass(errors.shippingMethod, true), "appearance-none cursor-pointer invalid:text-gray-400 invalid:font-normal")}
+                    {...register("shippingMethod")}
+                  >
                     <option value="" disabled hidden>Select Method</option>
                     <option value="standard">Standard</option>
                     <option value="express">Express</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400 pointer-events-none" />
                 </div>
+                {errors.shippingMethod && <p className="mt-1 text-[10px] text-red-500">{errors.shippingMethod.message}</p>}
               </div>
               <div>
                 <label className="block text-[11px] font-medium text-gray-500 mb-1.5">Shipment ID</label>
@@ -453,21 +516,21 @@ export default function CreateShipmentPage() {
                 <div className="relative">
                   <input 
                     type="date" 
-                    name="shipmentDate"
-                    required
-                    className={cn(grayInputClass, "pr-10")}
+                    className={cn(getInputClass(errors.shipmentDate, true), "pr-10")}
+                    {...register("shipmentDate")}
                   />
                 </div>
+                {errors.shipmentDate && <p className="mt-1 text-[10px] text-red-500">{errors.shipmentDate.message}</p>}
               </div>
             </div>
 
             <div>
               <label className="block text-[11px] font-medium text-gray-500 mb-1.5">Notes</label>
               <textarea 
-                name="notes"
                 placeholder="Add special delivery notes (optional)"
                 rows={3}
                 className="w-full rounded-lg bg-[#F9F9FC] px-4 py-3 text-[13px] font-medium text-gray-900 outline-none border border-transparent focus:border-[#856DF3] focus:ring-1 focus:ring-[#856DF3] transition-all resize-none placeholder:text-gray-400 placeholder:font-normal"
+                {...register("notes")}
               />
             </div>
 
