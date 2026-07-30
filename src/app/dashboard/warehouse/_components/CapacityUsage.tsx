@@ -14,7 +14,7 @@ export default function CapacityUsage({ className = '' }: { className?: string }
   return (
     <div className={`bg-[#333333] rounded-2xl p-5 flex flex-col w-full h-full text-white shadow-[0px_2px_4px_rgba(0,0,0,0.02)] overflow-hidden ${className}`}>
       <div className="flex justify-between items-start mb-2 shrink-0">
-        <h2 className="text-[16px] font-semibold text-gray-100">Capacity Usage</h2>
+        <h2 className="text-[16px] font-semibold text-[#FEFEFE] leading-[1.2]">Capacity Usage</h2>
         <button className="text-gray-400 hover:text-gray-200">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="1"/>
@@ -51,19 +51,19 @@ export default function CapacityUsage({ className = '' }: { className?: string }
           </PieChart>
         </ResponsiveContainer>
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <span className="text-[13px] text-gray-200 mb-1">Total Usage</span>
-          <span className="text-[32px] leading-none font-bold text-white">{capacityUsageData.total}%</span>
+          <span className="text-[12px] font-normal text-[#F0F0F0] mb-1 leading-[1.3]">Total Usage</span>
+          <span className="text-[28px] font-bold text-[#FEFEFE] leading-[1.1]">{capacityUsageData.total}%</span>
         </div>
       </div>
 
       <div className="flex justify-between mt-2 px-2 shrink-0">
         <div className="flex flex-col">
-          <div className="text-[13px] text-gray-200 mb-1">Loaded</div>
-          <div className="text-[16px] font-bold text-white leading-none">{capacityUsageData.loaded} shelves</div>
+          <div className="text-[11px] font-normal text-[#F0F0F0] mb-1 leading-[1.3]">Loaded</div>
+          <div className="text-[14px] font-bold text-[#FEFEFE] leading-[1.25]">{capacityUsageData.loaded} shelves</div>
         </div>
         <div className="flex flex-col">
-          <div className="text-[13px] text-gray-200 mb-1">Empty</div>
-          <div className="text-[16px] font-bold text-white leading-none">{capacityUsageData.empty} shelves</div>
+          <div className="text-[11px] font-normal text-[#F0F0F0] mb-1 leading-[1.3]">Empty</div>
+          <div className="text-[14px] font-bold text-[#FEFEFE] leading-[1.25]">{capacityUsageData.empty} shelves</div>
         </div>
       </div>
     </div>

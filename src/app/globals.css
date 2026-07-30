@@ -24,4 +24,10 @@
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
+  
+  @media (min-width: 1440px) {
+    .dashboard-grid {
+      grid-template-columns: 369fr 469fr 299fr;
+    }
+  }
 }

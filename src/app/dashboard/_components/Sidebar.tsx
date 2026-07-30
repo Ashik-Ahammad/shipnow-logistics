@@ -60,7 +60,7 @@ export default function Sidebar({ onMobileClose }: SidebarProps) {
   };
 
   return (
-    <div className="flex h-full w-22.5 flex-col border-r border-gray-100 bg-white transition-all duration-300 desktop:w-65">
+    <div className="flex h-full w-[54px] flex-col border-r border-gray-100 bg-white transition-all duration-300 desktop:w-[223px]">
       <div className="flex h-22 items-center justify-center gap-[8.7px] px-0 desktop:justify-start desktop:px-6">
         <Image
           src="/images/shipnowBlueLogo.png"
@@ -75,10 +75,10 @@ export default function Sidebar({ onMobileClose }: SidebarProps) {
         </span>
       </div>
 
-      <div className="mb-6 px-3 desktop:px-6 relative" ref={profileRef}>
+      <div className="mb-6 flex justify-center desktop:block desktop:px-6 relative" ref={profileRef}>
         <button 
           onClick={() => setIsProfileOpen(!isProfileOpen)}
-          className="flex w-full cursor-pointer items-center justify-center rounded-lg p-2 transition-colors bg-[#F0F0F0] desktop:justify-between"
+          className="flex h-10 w-10 desktop:h-auto desktop:w-full cursor-pointer items-center justify-center rounded-lg desktop:p-2 transition-colors bg-[#F0F0F0] desktop:justify-between"
         >
           <div className="flex items-center gap-3">
             <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-[#F0F0F0]">
@@ -98,7 +98,7 @@ export default function Sidebar({ onMobileClose }: SidebarProps) {
         </button>
 
         {isProfileOpen && (
-          <div className="absolute top-full left-3 right-3 desktop:left-6 desktop:right-6 mt-1.5 rounded-xl bg-white p-1.5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] border border-gray-100 z-50">
+          <div className="absolute top-full left-[60px] w-48 desktop:left-6 desktop:right-6 desktop:w-auto mt-1.5 rounded-xl bg-white p-1.5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] border border-gray-100 z-50">
             <div className="px-3 py-2 border-b border-gray-100 mb-1 hidden tablet:block desktop:hidden text-center">
               <p className="text-[13px] font-bold text-gray-900">John Doe</p>
               <p className="text-[11px] text-gray-500">Admin</p>
@@ -120,7 +120,7 @@ export default function Sidebar({ onMobileClose }: SidebarProps) {
         )}
       </div>
 
-      <nav className="flex-1 space-y-1 overflow-y-auto px-3 [-ms-overflow-style:none] scrollbar-none [&::-webkit-scrollbar]:hidden desktop:px-4">
+      <nav className="flex-1 space-y-1 overflow-y-auto px-2 [-ms-overflow-style:none] scrollbar-none [&::-webkit-scrollbar]:hidden desktop:px-4">
         {mainNav.map((item) => {
           const isActive = pathname === item.href || (item.href === "/dashboard" && pathname === "/");
 

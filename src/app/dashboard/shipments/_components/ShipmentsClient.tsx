@@ -34,8 +34,17 @@ function ShipmentsContent() {
 
   const [freightFilter, setFreightFilter] = useState("All");
   const [dateFilter, setDateFilter] = useState("This Month");
+  const [sortFilter, setSortFilter] = useState("Default");
 
   const [data, setData] = useState([...shipmentsData]);
+
+  // Sync search param from URL if it changes (e.g. from the global header search)
+  useEffect(() => {
+    const searchFromUrl = searchParams.get("search");
+    if (searchFromUrl !== null && searchFromUrl !== searchQuery) {
+      setSearchQuery(searchFromUrl);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     return subscribeToShipments(() => {
@@ -60,8 +69,19 @@ function ShipmentsContent() {
     return matchesSearch && matchesStatus && matchesFreight && matchesDate;
   });
 
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const paginatedData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const sortedData = [...filteredData].sort((a, b) => {
+    if (sortFilter === "A-Z") return a.company.name.localeCompare(b.company.name);
+    if (sortFilter === "Z-A") return b.company.name.localeCompare(a.company.name);
+    if (sortFilter === "Newest" || sortFilter === "Oldest") {
+       const dateA = a.dates.atd !== "Pending" ? new Date(a.dates.atd).getTime() : new Date(a.dates.eta).getTime();
+       const dateB = b.dates.atd !== "Pending" ? new Date(b.dates.atd).getTime() : new Date(b.dates.eta).getTime();
+       return sortFilter === "Newest" ? dateB - dateA : dateA - dateB;
+    }
+    return 0;
+  });
+
+  const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+  const paginatedData = sortedData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const metricCards = [
     {
@@ -147,12 +167,12 @@ function ShipmentsContent() {
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F5F3FF]">
                     {card.icon}
                   </div>
-                  <p className="text-[15px] font-medium text-gray-500">{card.label}</p>
+                  <p className="text-[12px] font-semibold text-[#757575]">{card.label}</p>
                 </div>
                 <button className="text-gray-400 hover:text-gray-600">...</button>
               </div>
               <div className="flex items-end justify-between">
-                <p className="text-[32px] font-bold text-gray-900 leading-none">{card.value}</p>
+                <p className="text-[28px] font-bold text-[#333333] leading-[1.1]">{card.value}</p>
                 <div className="flex items-center gap-2">
                   <div className={cn(
                     "flex h-5.5 w-5.5 items-center justify-center rounded-full shrink-0",
@@ -166,7 +186,7 @@ function ShipmentsContent() {
                   </div>
                   <div className="flex flex-col">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[11px] font-medium text-gray-400">
+                      <span className="text-[10px] font-normal text-[#757575]">
                         {card.isUp ? "Up by" : "Down"}
                       </span>
                       <span className={cn(
@@ -176,7 +196,7 @@ function ShipmentsContent() {
                         {card.percentage}
                       </span>
                     </div>
-                    <span className="text-[11px] text-gray-400 leading-tight mt-0.5">
+                    <span className="text-[10px] font-normal text-[#757575] leading-tight mt-0.5">
                       {card.timeframe}
                     </span>
                   </div>
@@ -188,22 +208,23 @@ function ShipmentsContent() {
       )}
 
       {/* Main Content Area */}
-      <div className="flex flex-1 flex-col rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
-        <ShipmentsToolbar 
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-          viewMode={viewMode}
-          onViewChange={handleViewChange}
-          freightFilter={freightFilter}
-          setFreightFilter={setFreightFilter}
-          dateFilter={dateFilter}
-          setDateFilter={setDateFilter}
-        />
-        
-        <div className="flex-1 overflow-auto bg-[#F9F9FC] p-4">
-          {viewMode === "table" ? (
+      {viewMode === "table" ? (
+        <div className="flex flex-1 flex-col rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
+          <ShipmentsToolbar 
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
+            viewMode={viewMode}
+            onViewChange={handleViewChange}
+            freightFilter={freightFilter}
+            setFreightFilter={setFreightFilter}
+            dateFilter={dateFilter}
+            setDateFilter={setDateFilter}
+            sortFilter={sortFilter}
+            setSortFilter={setSortFilter}
+          />
+          <div className="flex-1 overflow-auto">
             <ShipmentsTable 
               data={paginatedData} 
               currentPage={currentPage}
@@ -216,7 +237,25 @@ function ShipmentsContent() {
               }}
               totalItems={filteredData.length}
             />
-          ) : (
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <ShipmentsToolbar 
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
+            viewMode={viewMode}
+            onViewChange={handleViewChange}
+            freightFilter={freightFilter}
+            setFreightFilter={setFreightFilter}
+            dateFilter={dateFilter}
+            setDateFilter={setDateFilter}
+            sortFilter={sortFilter}
+            setSortFilter={setSortFilter}
+          />
+          <div className="flex-1 overflow-auto">
             <ShipmentsGrid 
               data={paginatedData}
               currentPage={currentPage}
@@ -229,9 +268,9 @@ function ShipmentsContent() {
               }}
               totalItems={filteredData.length}
             />
-          )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

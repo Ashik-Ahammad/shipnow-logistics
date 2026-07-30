@@ -68,7 +68,7 @@ export default function WarehouseStorage() {
   return (
     <div className="bg-white rounded-2xl p-6 flex flex-col w-full shadow-[0px_2px_4px_rgba(0,0,0,0.02)] h-full overflow-hidden">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-        <h2 className="text-[15px] font-semibold text-gray-800">Warehouse Storage</h2>
+        <h2 className="text-[16px] font-semibold text-[#333333] leading-[1.2]">Warehouse Storage</h2>
         <div className="flex items-center gap-3 text-sm">
           <div className="relative" ref={filterRef}>
             <button 
@@ -124,7 +124,7 @@ export default function WarehouseStorage() {
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse whitespace-nowrap min-w-150">
           <thead>
-            <tr className="border-b border-gray-100 text-[11px] uppercase tracking-wider text-gray-400 font-semibold">
+            <tr className="border-b border-gray-100 text-[9px] font-normal text-[#757575] leading-[1.3]">
               <th className="pb-3 pl-4 pr-2 font-medium w-16">
                 <div onClick={() => handleSort('floor')} className="flex items-center gap-1 cursor-pointer select-none">Floor <SortIcon active={sortKey === 'floor'} order={sortOrder} /></div>
               </th>
@@ -145,21 +145,21 @@ export default function WarehouseStorage() {
               </th>
             </tr>
           </thead>
-          <tbody className="text-[13px] text-gray-700">
+          <tbody className="text-[12px] font-normal text-[#333333] leading-[1.3]">
             {processedData.map((row, idx) => (
               <tr key={row.id} className={`${idx !== processedData.length - 1 ? 'border-b border-gray-50' : ''}`}>
-                <td className="py-4 pl-4 pr-2 font-medium">{row.floor}</td>
+                <td className="py-4 pl-4 pr-2">{row.floor}</td>
                 <td className="py-4 px-4">{row.section}</td>
-                <td className="py-4 px-4 text-gray-500">{row.category}</td>
+                <td className="py-4 px-4">{row.category}</td>
                 <td className="py-4 px-4">
-                  <div className="h-2 w-32 bg-gray-100 rounded-full overflow-hidden flex">
-                    <div className="h-full bg-[#856DF3] rounded-full" style={{ width: `${row.percentage}%` }} />
+                  <div className="h-[12px] w-[120px] bg-[#F5F5F5] rounded-sm overflow-hidden flex">
+                    <div className="h-full bg-[#856DF3] " style={{ width: `${row.percentage}%` }} />
                   </div>
                 </td>
-                <td className="py-4 px-4 text-center font-semibold">{row.percentage}%</td>
+                <td className="py-4 px-4 text-center">{row.percentage}%</td>
                 <td className="py-4 pl-4 pr-4 text-right">
-                  <span className="font-semibold text-gray-900">{row.available}</span>
-                  <span className="text-gray-400">/{row.total}</span>
+                  <span className="text-[12px] font-semibold text-[#333333] leading-[1.3]">{row.available}</span>
+                  <span className="text-[10px] font-normal text-[#757575] leading-[1.3]">/{row.total}</span>
                 </td>
               </tr>
             ))}

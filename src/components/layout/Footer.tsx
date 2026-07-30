@@ -36,10 +36,10 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto flex flex-col items-center gap-4 pt-6 pb-6 text-[13px] text-[#757575] tablet:flex-row tablet:justify-between tablet:pb-2">
+    <footer className="flex flex-col items-center gap-4 pt-6 pb-6 text-[13px] text-[#757575] tablet:flex-row tablet:justify-between tablet:pb-2">
       <div className="flex flex-col items-center gap-2 tablet:flex-row tablet:gap-6 text-center tablet:text-left">
         <span className="font-semibold text-[#333333]">
-          Copyright © {currentYear} Peterdraw
+          Copyright © {currentYear} Ashik Ahammad
         </span>
         <div className="flex items-center gap-4 tablet:gap-6">
           <a href="#" className="hover:text-[#333333] transition-colors">

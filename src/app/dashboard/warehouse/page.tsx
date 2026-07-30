@@ -28,13 +28,13 @@ export default function WarehousePage() {
       </div>
 
       {/* Main Grid Layout */}
-      <div className="flex flex-col md:grid md:grid-cols-2 xl:flex xl:flex-row gap-6">
+      <div className="flex flex-col md:grid md:grid-cols-12 xl:flex xl:flex-row gap-6">
         
         {/* Left Column Wrapper */}
         <div className="contents xl:flex xl:flex-col xl:w-[calc(75%-12px)] gap-6">
           
           {/* Top Row (StatCards & Inventory) */}
-          <div className="order-1 md:col-span-2 flex flex-col xl:flex-row gap-6">
+          <div className="order-1 md:col-span-12 flex flex-col xl:flex-row gap-6">
             <div className="xl:w-1/3 grid grid-cols-3 xl:flex xl:flex-col gap-3 md:gap-4 sm:gap-6 pb-2 sm:pb-0 h-27.5 sm:h-auto xl:h-70">
               <StatCard title="Total SKU" data={inventoryStats.totalSku} />
               <StatCard title="Quantity on Hand" data={inventoryStats.quantityOnHand} unit="units" />
@@ -46,12 +46,12 @@ export default function WarehousePage() {
           </div>
 
           {/* Storage */}
-          <div className="order-4 md:col-span-2 flex flex-col h-full">
+          <div className="order-4 md:col-span-12 flex flex-col h-full">
             <WarehouseStorage />
           </div>
 
           {/* Map */}
-          <div className="order-5 md:col-span-2 flex-1 flex flex-col h-full">
+          <div className="order-5 md:col-span-12 flex-1 flex flex-col h-full">
             <WarehouseMap />
           </div>
 
@@ -61,13 +61,13 @@ export default function WarehousePage() {
         <div className="contents xl:flex xl:flex-col xl:w-[calc(25%-12px)] gap-6">
           
           {/* Capacity Usage */}
-          <CapacityUsage className="order-2 md:col-span-1 h-74.5" />
+          <CapacityUsage className="order-2 md:col-span-5 xl:col-span-1 min-h-[300px]" />
           
           {/* Package Status */}
-          <PackageStatus className="order-3 md:col-span-1 md:h-74.5 xl:h-auto" />
+          <PackageStatus className="order-3 md:col-span-7 xl:col-span-1" />
           
           {/* Activity Log */}
-          <div className="order-6 md:col-span-2 xl:flex-1 flex">
+          <div className="order-6 md:col-span-12 xl:flex-1 flex">
             <ActivityLog />
           </div>
 

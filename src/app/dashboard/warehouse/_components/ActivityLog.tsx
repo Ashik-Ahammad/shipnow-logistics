@@ -28,7 +28,7 @@ export default function ActivityLog() {
   return (
     <div className="bg-white rounded-2xl p-6 flex flex-col w-full h-full shadow-[0px_2px_4px_rgba(0,0,0,0.02)]">
       <div className="flex justify-between items-start mb-6 shrink-0">
-        <h2 className="text-[16px] font-semibold text-[#1f2937]">Warehouse Activity Log</h2>
+        <h2 className="text-[16px] font-semibold text-[#333333] leading-[1.2]">Warehouse Activity Log</h2>
         <button className="text-gray-400 hover:text-gray-600">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="1"/>
@@ -46,11 +46,11 @@ export default function ActivityLog() {
             </div>
             
             <div className={`flex flex-col flex-1 pb-5 ${index !== activityLog.length - 1 ? 'border-b border-gray-100 mb-5' : ''}`}>
-              <p className="text-[13px] text-gray-600 leading-[1.6]">
+              <p className="text-[12px] font-normal text-[#333333] leading-[1.3]">
                 <span className="font-semibold text-[#856DF3] mr-1 cursor-pointer">{log.user}</span>
                 {log.action}
               </p>
-              <span className="text-[12px] text-gray-400 mt-1 font-medium">{log.time}</span>
+              <span className="text-[10px] font-normal text-[#757575] leading-[1.3] mt-1">{log.time}</span>
             </div>
           </div>
         ))}

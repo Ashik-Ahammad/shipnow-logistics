@@ -46,7 +46,7 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
 
 export default function ShipmentType() {
   return (
-    <div className="flex h-98.5 flex-col rounded-[20px] bg-white p-5 shadow-[0px_2px_10px_rgba(0,0,0,0.02)]">
+    <div className="flex h-full flex-col rounded-[20px] bg-white p-5 shadow-[0px_2px_10px_rgba(0,0,0,0.02)]">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-[16px] font-bold text-[#333333]">Shipment Type</h2>
         <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-gray-100">

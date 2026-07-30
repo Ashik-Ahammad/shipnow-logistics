@@ -34,7 +34,7 @@ export default function DashboardLayout({
       <div className="flex flex-1 flex-col min-w-0 overflow-y-auto p-5 gap-5">
         <Header onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} /> 
         
-        <main className="flex-1">
+        <main className="flex-1 flex flex-col">
           {children}
         </main>
 

@@ -24,16 +24,11 @@ export default function ProductCategories() {
       </div>
 
       {/* Visual Bar */}
-      <div className="mb-8 flex h-12 w-full gap-1">
+      <div className="mb-8 flex h-8 w-full overflow-hidden rounded-lg">
         {productCategoriesData.categories.map((cat, index) => (
           <div 
             key={index} 
-            className={cn(
-              "h-full", 
-              cat.color,
-              index === 0 && "rounded-l-lg",
-              index === productCategoriesData.categories.length - 1 && "rounded-r-lg"
-            )}
+            className={cat.color}
             style={{ width: `${cat.percentage}%` }}
           />
         ))}
@@ -47,9 +42,10 @@ export default function ProductCategories() {
               <div className={cn("h-2.5 w-2.5 rounded-full", cat.color)} />
               <span className="text-[13px] font-bold text-[#333333]">{cat.name}</span>
             </div>
-            <div className="flex items-center gap-4">
-              <span className="text-[12px] font-medium text-[#A3A3A3]">{cat.count} products</span>
-              <span className="w-8 text-right text-[13px] font-bold text-[#333333]">{cat.percentage}%</span>
+            <div className="flex items-center rounded-md bg-[#F4F4F5] px-2.5 py-1 text-[11px]">
+              <span className="font-medium text-[#757575]">{cat.count} products</span>
+              <div className="mx-2.5 h-3 w-[1px] bg-[#E0E0E0]" />
+              <span className="font-bold text-[#333333]">{cat.percentage}%</span>
             </div>
           </div>
         ))}
